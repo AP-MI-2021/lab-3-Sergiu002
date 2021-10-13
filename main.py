@@ -97,31 +97,72 @@ def test_get_longest_sum_is_prime():
     assert get_longest_sum_is_prime([1, 2, 3, 4]) == [1, 2]
     assert get_longest_sum_is_prime([4, 4, 6]) == []
 def print_menu():
-    print("1. Citire lista")
+    print("0. Citire lista")
+    print("1. Citire parametru k pentru problema 6")
     print("2. Afisare cea mai lunga subsecventa de nr. in care suma numerelor sa fie prima")
     print("3. Afisare cea mai lunga subsecventa de nr. formate din cifre prime")
-    print("4. Iesire")
+    print("4. Afisare cea mai lunga subsecventa de nr. divizibile cu k")
+    print("5. Iesire")
+
+#problema 6
+def get_all_num_div_k(List, k):
+    """
+    Determina daca toate nr. dintr-o lista sunt divizibile cu k
+    :param List: lista de nr. intregi
+    :param k: paramatrul cu care trebuie sa fie divizibile numerele (tip intreg)
+    :return: True, daca toate nr. sunt divizibile cu k si False in caz contrar
+    """
+    for number in List:
+        if number % k != 0:
+            return False
+    return True
+def get_longest_div_k(List, k):
+    """
+    Determina cea mai lunga subsecventa de nr. divizibile cu k
+    :param List: lista de nr. intregi
+    :param k: paramatrul cu care trebuie sa fie divizibile numerele (tip intreg)
+    :return: Cea mai lunga subsecventa de nr. divizibile cu k
+    """
+    subsecventaMax = []
+    for first in range(len(List)):
+        for second in range(first, len(List)):
+            if get_all_num_div_k(List[first:second + 1], k) and len(List[first:second + 1]) > len(subsecventaMax):
+                subsecventaMax = List[first:second + 1]
+    return subsecventaMax
+
+def test_get_longest_div_k():
+    """
+    Functia de test pentru functia get_longest_div_k
+    """
+    assert get_longest_div_k([2, 3, 4, 6, 8, 7], 3) == [3]
+    assert get_longest_div_k([1, 2, 3, 4, 8], 2) == [4, 8]
+    assert get_longest_div_k([7, 14, 28, 3, 5, 6, 21], 7) == [7, 14, 28]
 def main():
     """
     Meniul utilizatorului
     """
     test_get_longest_prime_digits()
     test_get_longest_sum_is_prime()
+    test_get_longest_div_k()
     while True:
         print_menu()
         optiunea = int(input("Dati optiunea: "))
-        if optiunea == 1:
+        if optiunea == 0:
             List = []
             given_string = input("Introduceti lista: ")
             numbers_as_string = given_string.split(" ")
             for index in numbers_as_string:
                 List.append(int(index))
+        elif optiunea == 1:
+            param_k = int(input("Introduceti un numar: "))
         elif optiunea == 2:
             print(get_longest_sum_is_prime(List))
         elif optiunea == 3:
             print(get_longest_prime_digits(List))
         elif optiunea == 4:
-             break
+            print(get_longest_div_k(List, param_k))
+        elif optiunea == 5:
+            break
         else:
             print("Optiune gresita! Reincercati!")
 if __name__ == '__main__':
